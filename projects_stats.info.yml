@@ -1,0 +1,5 @@
+name: Projects stats
+type: module
+description: Get modules and themes statistics from drupal.org
+core: 8.x
+package: Web services

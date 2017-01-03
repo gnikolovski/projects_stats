@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains projects_stats.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function projects_stats_theme($existing, $type, $theme, $path) {
+  return [
+    'projects_stats' => [
+      'variables' => [
+        'classes' => '',
+        'stats' => [],
+        'target' => '_self',
+      ],
+    ],
+  ];
+}
