@@ -38,7 +38,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -49,7 +49,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $plugin_definition
     );
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -62,7 +62,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       'target' => TRUE,
     ];
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -119,7 +119,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $this->configuration['classes'] = $form_state->getValue('classes');
     $this->configuration['target'] = $form_state->getValue('target');
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -140,11 +140,11 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'downloads_raw' => $downloads,
       ];
     }
-    
+
     if ($sort_by != 'no') {
       usort($stats, [$this, 'sortModulesList']);
     }
-    
+
     return [
       '#theme' => 'projects_stats',
       '#stats' => $stats,
@@ -153,12 +153,15 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#cache' => ['max-age' => $cache_age],
     ];
   }
-  
+
+  /**
+   * Get data from drupal.org API endpoint.
+   */
   private function performRequest($machine_names) {
     $base_url = 'https://www.drupal.org/api-d7/node.json?field_project_machine_name=';
-    $client = new \GuzzleHttp\Client;
+    $client = new Client();
     try {
-      $res = $client->get($base_url . $machine_names, ['http_errors' => false]);
+      $res = $client->get($base_url . $machine_names, ['http_errors' => FALSE]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
       if (!isset($decoded_body['list'][0])) {
@@ -167,20 +170,23 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $download_count = $decoded_body['list'][0]['field_download_count'];
       $download_count = isset($download_count) ? $download_count : 0;
       return $download_count;
-    } 
+    }
     catch (RequestException $e) {
       drupal_set_message($e);
       return 0;
     }
   }
-  
+
+  /**
+   * Sort projects.
+   */
   private function sortModulesList($a, $b) {
     $sort_by = $this->configuration['sort_by'];
     if ($sort_by == 'count') {
       return $a['downloads_raw'] < $b['downloads_raw'];
     }
     else {
-      return strcmp ($a['title'][0], $b['title'][0]);
+      return strcmp($a['title'][0], $b['title'][0]);
     }
   }
 
