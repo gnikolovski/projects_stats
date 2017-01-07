@@ -12,10 +12,10 @@
 
 Are you a module or theme developer? Have you created several modules or theme
 and you want to see them all in one place? Probably not. But if you, for some
-reason need to display a number of downloads for a list of module(s) and/or
-theme(s) then you should try out this module. Projects stats provides a block,
-which displays a table with project names and downloads count for selected
-modules and/or themes.
+reason need to display a number of downloads for a list of module and/or theme
+then you should try out this module. Projects stats provides a block, which
+displays a table with project names and downloads count for selected modules
+and/or themes.
 
 ##REQUIREMENTS
 
@@ -23,7 +23,7 @@ None.
 
 ##INSTALLATION
 
-1. Install module as usual via Drush or Drupal UI
+1. Install module as usual via Drupal UI, Drush or Composer
 2. Go to "Extend" and enable the Projects stats module.
 
 ##USING THE MODULE
