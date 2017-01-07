@@ -99,6 +99,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'textfield',
       '#title' => $this->t('Table classes'),
       '#default_value' => $this->configuration['classes'],
+      '#description' => $this->t('Specify CSS classes for table. Separate multiple classes with empty space.'),
     ];
     $form['target'] = [
       '#type' => 'checkbox',
