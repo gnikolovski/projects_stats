@@ -126,10 +126,10 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    */
   public function build() {
     $machine_names = $this->configuration['machine_names'];
-    $cache_age = $this->configuration['cache_age'];
-    $target = $this->configuration['target'];
     $sort_by = $this->configuration['sort_by'];
+    $cache_age = $this->configuration['cache_age'];
     $classes = $this->configuration['classes'];
+    $target = $this->configuration['target'];
     $machine_names = explode(',', $machine_names);
     $stats = [];
     foreach ($machine_names as $machine_name) {
