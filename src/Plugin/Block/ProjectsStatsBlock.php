@@ -152,7 +152,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         $key = str_replace('_', ' ', $key);
         $key = ucfirst($key);
         $key = $this->t($key);
-        $table_head[] = $value;
+        $table_head[] = $key;
       }
     }
 
