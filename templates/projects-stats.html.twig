@@ -1,12 +1,16 @@
 <table{{ attributes.addClass(classes) }}>
   <tr>
-    <th>{% trans %}Name{% endtrans %}</th>
-    <th>{% trans %}Downloads{% endtrans %}</th>
+    {% for cell in table_head %}
+      <th>{{ cell }}</th>
+    {% endfor %}
   </tr>
-  {% for stat in stats %}
+  {% for cell in table_body %}
     <tr>
-      <td>{{ link(stat.title, stat.url, {'target': target}) }}</td>
-      <td>{{ stat.downloads }}</td>
+      <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
+      <td>{{ cell.downloads }}</td>
+      {% if cell.created %}<td>{{ cell.created }}</td>{% endif %}
+      {% if cell.changed %}<td>{{ cell.changed }}</td>{% endif %}
+      {% if cell.last_version %}<td>{{ cell.last_version }}</td>{% endif %}
     </tr>
   {% endfor %}
 </table>

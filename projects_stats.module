@@ -13,7 +13,8 @@ function projects_stats_theme($existing, $type, $theme, $path) {
     'projects_stats' => [
       'variables' => [
         'classes' => '',
-        'stats' => [],
+        'table_head' => [],
+        'table_body' => [],
         'target' => '_self',
       ],
     ],
