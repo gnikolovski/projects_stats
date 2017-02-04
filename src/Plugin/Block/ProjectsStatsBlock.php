@@ -147,7 +147,6 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $target = $this->configuration['target'];
 
     $table_head = [$this->t('Title'), $this->t('Downloads')];
-    dsm($additional_columns);
     foreach ($additional_columns as $key => $value) {
       if ($value !== 0) {
         $key = str_replace('_', ' ', $key);
