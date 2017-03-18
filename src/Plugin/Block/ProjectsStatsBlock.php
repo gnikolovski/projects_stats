@@ -16,7 +16,7 @@ use SimpleXMLElement;
  *
  * @Block(
  *  id = "projects_stats",
- *  admin_label = @Translation("Projects stats"),
+ *  admin_label = @Translation("Projects Stats"),
  *  category = @Translation("Custom"),
  * )
  */
@@ -61,7 +61,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       'sort_by' => 'count',
       'cache_age' => 21600,
       'classes' => '',
-      'target' => TRUE,
+      'target' => true,
     ];
   }
 
@@ -71,10 +71,10 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   public function blockForm($form, FormStateInterface $form_state) {
     $form['machine_names'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('Modules/themes machine names'),
-      '#description' => $this->t('Specify modules/themes by using their machine names. Separate multiple values by a comma.'),
+      '#title' => $this->t('Project machine names'),
+      '#description' => $this->t('Specify modules/themes/distributions by using their machine names. Separate multiple values by a comma.'),
       '#default_value' => $this->configuration['machine_names'],
-      '#required' => TRUE,
+      '#required' => true,
     ];
     $form['additional_columns'] = [
       '#type' => 'checkboxes',
@@ -115,7 +115,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     ];
     $form['target'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Open modules links in the new tab'),
+      '#title' => $this->t('Open links in the new tab'),
       '#default_value' => $this->configuration['target'],
     ];
 
@@ -195,7 +195,12 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
       if (!isset($decoded_body['list'][0])) {
-        return 0;
+        return [
+          'download_count' => 0,
+          'created' => $this->t('n/a'),
+          'changed' => $this->t('n/a'),
+          'last_version' => $this->t('n/a'),
+        ];
       }
       $download_count = $decoded_body['list'][0]['field_download_count'];
       $created = $decoded_body['list'][0]['created'];
@@ -214,9 +219,9 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       drupal_set_message($e);
       $stats = [
         'download_count' => 0,
-        'created' => 'n/a',
-        'changed' => 'n/a',
-        'last_version' => 'n/a',
+        'created' => $this->t('n/a'),
+        'changed' => $this->t('n/a'),
+        'last_version' => $this->t('n/a'),
       ];
       return $stats;
     }
@@ -233,11 +238,17 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $versions = new SimpleXMLElement($xml);
       $last_version = isset($versions->releases->release->version) ? $versions->releases->release->version : 'n/a';
       $changed = isset($versions->releases->release->date) ? date('d-m-Y', $versions->releases->release->date->__toString()) : 'n/a';
-      return ['last_version' => $last_version, 'changed' => $changed];
+      return [
+        'last_version' => $last_version,
+        'changed' => $changed,
+      ];
     }
     catch (RequestException $e) {
       drupal_set_message($e);
-      return ['last_version' => 'n/a', 'changed' => 'n/a'];
+      return [
+        'last_version' => $this->t('n/a'),
+        'changed' => $this->t('n/a'),
+      ];
     }
   }
 

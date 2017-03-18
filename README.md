@@ -1,4 +1,4 @@
-#Projects stats
+#Projects Stats
 
 ##CONTENTS OF THIS FILE
 
@@ -13,9 +13,10 @@
 Are you a module or theme developer? Have you created several modules or theme
 and you want to see them all in one place? Probably not. But if you, for some
 reason need to display a number of downloads for a list of module and/or theme
-then you should try out this module. Projects stats provides a block, which
-displays a table with project names and downloads count for selected modules
-and/or themes.
+then you should try out this module. Projects Stats provides a block, which
+displays a table with project names and downloads count for selected modules,
+themes and/or distributions. Another great option is a Slack integration. You
+can receive download counts directly to your Slack channel.
 
 ##REQUIREMENTS
 
@@ -24,16 +25,25 @@ None.
 ##INSTALLATION
 
 1. Install module as usual via Drupal UI, Drush or Composer
-2. Go to "Extend" and enable the Projects stats module.
+2. Go to "Extend" and enable the Projects Stats module.
 
 ##USING THE MODULE
 
 After you install the module, go to the block layout 'admin/structure/block' and
-add a 'Projects stats' block. After you click 'Place block' button, you will see
-a number of options. You need to enter machine names of project you want to
+add a 'Projects Stats' block. After you click 'Place block' button, you will see
+a number of options. You need to enter machine names of the projects you want to
 display in your block, and there are several more options like cache age for
 block, sort type and table classes. Every block has it's own settings, so you
 can have multiple blocks that show different list of projects.
+
+Slack integration can be configured here: 'admin/config/services/projects-stats'
+To enable sending messages to your Slack channel, you have to create an
+integration. Go to this page: https://slack.com/services/new/incoming-webhook
+and follow the instructions. After you create an integration copy and paste the
+given Webhook URL to the module settings. You can choose when you want to send a
+message. If you choose to use Drupal's cron, then sending interval will depend
+on the cron settings. Recommended option is to use the external cron job,
+because then you can fine tune when you want to send a message.
 
 ###AUTHOR
 

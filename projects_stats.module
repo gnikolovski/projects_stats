@@ -20,3 +20,14 @@ function projects_stats_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_cron().
+ */
+function projects_stats_cron() {
+  $config = \Drupal::config('projects_stats.settings');
+  if ($config->get('send_stats_to_slack') == true && $config->get('sending_type') == 'drupal_cron') {
+    $slack_service = \Drupal::service('projects_stats.slack_message');
+    $slack_service->sendMessage();
+  }
+}
