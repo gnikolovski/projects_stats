@@ -11,12 +11,12 @@
 ##INTRODUCTION
 
 Are you a module or theme developer? Have you created several modules, themes or
-distributions and you want to see them all in one place? Probably not. But if
-you for some reason need to display a number of downloads for a list of modules,
+distributions and you want to see how popular they are? Probably not. But if you 
+for some reason need to display a number of downloads for a list of modules, 
 themes and/or distributions then you should try out this module. Projects Stats
-provides a block, which displays a table with project names and downloads count. 
-Another great option is a Slack integration. You can receive downloads count
-directly to your Slack channel.
+provides a block, which displays a table with project names, downloads count and
+some additional stats. Another great option is a Slack integration. You can 
+receive downloads count directly to your Slack channel.
 
 ##REQUIREMENTS
 
