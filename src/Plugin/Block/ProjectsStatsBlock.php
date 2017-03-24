@@ -120,7 +120,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
 
     $form['target'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Open links in the new tab'),
+      '#title' => $this->t('Open project links in the new tab'),
       '#default_value' => $this->configuration['target'],
     ];
 
