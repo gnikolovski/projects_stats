@@ -17,7 +17,7 @@ use SimpleXMLElement;
  * @Block(
  *  id = "projects_stats",
  *  admin_label = @Translation("Projects Stats"),
- *  category = @Translation("Custom"),
+ *  category = @Translation("Web services"),
  * )
  */
 class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInterface {
@@ -76,6 +76,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#default_value' => $this->configuration['machine_names'],
       '#required' => true,
     ];
+
     $form['additional_columns'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Additional columns'),
@@ -86,6 +87,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ],
       '#default_value' => $this->configuration['additional_columns'],
     ];
+
     $form['sort_by'] = [
       '#type' => 'select',
       '#title' => $this->t('Sort by'),
@@ -96,6 +98,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ],
       '#default_value' => $this->configuration['sort_by'],
     ];
+
     $form['cache_age'] = [
       '#type' => 'select',
       '#title' => $this->t('Block cache age'),
@@ -107,12 +110,14 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ],
       '#default_value' => $this->configuration['cache_age'],
     ];
+
     $form['classes'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Table classes'),
       '#default_value' => $this->configuration['classes'],
       '#description' => $this->t('Specify CSS classes for table. Separate multiple classes with empty space.'),
     ];
+
     $form['target'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Open links in the new tab'),
@@ -216,7 +221,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       return $stats;
     }
     catch (RequestException $e) {
-      drupal_set_message($e);
+      drupal_set_message($e->getMessage());
       $stats = [
         'download_count' => 0,
         'created' => $this->t('n/a'),
@@ -244,7 +249,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
     catch (RequestException $e) {
-      drupal_set_message($e);
+      drupal_set_message($e->getMessage());
       return [
         'last_version' => $this->t('n/a'),
         'changed' => $this->t('n/a'),

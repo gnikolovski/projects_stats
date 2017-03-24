@@ -10,13 +10,13 @@
 
 ##INTRODUCTION
 
-Are you a module or theme developer? Have you created several modules or theme
-and you want to see them all in one place? Probably not. But if you, for some
-reason need to display a number of downloads for a list of module and/or theme
-then you should try out this module. Projects Stats provides a block, which
-displays a table with project names and downloads count for selected modules,
-themes and/or distributions. Another great option is a Slack integration. You
-can receive download counts directly to your Slack channel.
+Are you a module or theme developer? Have you created several modules, themes or
+distributions and you want to see them all in one place? Probably not. But if
+you for some reason need to display a number of downloads for a list of modules,
+themes and/or distributions then you should try out this module. Projects Stats
+provides a block, which displays a table with project names and downloads count. 
+Another great option is a Slack integration. You can receive downloads count
+directly to your Slack channel.
 
 ##REQUIREMENTS
 
@@ -43,7 +43,7 @@ and follow the instructions. After you create an integration copy and paste the
 given Webhook URL to the module settings. You can choose when you want to send a
 message. If you choose to use Drupal's cron, then sending interval will depend
 on the cron settings. Recommended option is to use the external cron job,
-because then you can fine tune when you want to send a message.
+because then you can fine-tune when it runs.
 
 ###AUTHOR
 

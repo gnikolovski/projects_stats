@@ -27,7 +27,7 @@ class SlackMessageController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('projects_stats.slack_message')
+      $container->get('projects_stats.slack_service')
     );
   }
 

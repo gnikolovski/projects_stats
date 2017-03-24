@@ -45,7 +45,7 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
 
     $message =  t('Downloads') . ':' . PHP_EOL;
     foreach ($machine_names as $machine_name) {
-      $message .= $this->getStats(trim($machine_name)) . PHP_EOL;
+      $message .= $this->getDownloadsCount(trim($machine_name)) . PHP_EOL;
     }
 
     return [
@@ -56,7 +56,7 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
   /**
    * Get data from drupal.org API endpoint.
    */
-  private function getStats($machine_name) {
+  private function getDownloadsCount($machine_name) {
     $base_url = 'https://www.drupal.org/api-d7/node.json?field_project_machine_name=';
     $client = new Client();
     try {
@@ -66,12 +66,12 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
       if (!isset($decoded_body['list'][0])) {
         return $this->t('n/a');
       }
-      $download_count = '_' . $decoded_body['list'][0]['title'] . ': ' . $decoded_body['list'][0]['field_download_count'] . '_';
-      return $download_count;
+      $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' . $decoded_body['list'][0]['field_download_count'] . '_';
+      return $downloads_count;
     }
     catch (RequestException $e) {
-      drupal_set_message($e);
-      return 0;
+      drupal_set_message($e->getMessage());
+      return $this->t('n/a');
     }
   }
 }

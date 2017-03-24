@@ -1,5 +1,5 @@
-projects_stats.config_form:
+projects_stats.settings_form:
   title: Projects Stats
   description: 'Configure Projects Stats module.'
-  route_name: projects_stats.config_form
+  route_name: projects_stats.settings_form
   parent: system.admin_config_services

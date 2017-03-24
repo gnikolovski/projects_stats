@@ -40,11 +40,13 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Slack integration'),
       '#open' => true,
     );
+
     $form['slack_integration']['send_stats_to_slack'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Send download counts to a Slack channel'),
+      '#title' => $this->t('Send downloads count to a Slack channel'),
       '#default_value' => $config->get('send_stats_to_slack'),
     ];
+
     $form['slack_integration']['machine_names'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Project machine names'),
@@ -57,6 +59,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+
     $form['slack_integration']['webhook_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Webhook URL'),
@@ -70,6 +73,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+
     $form['slack_integration']['sending_type'] = [
       '#type' => 'radios',
       '#title' => $this->t('Sending type'),
@@ -85,6 +89,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+
     $host = \Drupal::request()->getHost();
     $form['slack_integration']['external_cron_url'] = [
       '#type' => 'textfield',
@@ -110,6 +115,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $config = $this->config('projects_stats.settings');
+
     $config->set('send_stats_to_slack', $values['send_stats_to_slack']);
     $config->set('machine_names', $values['machine_names']);
     $config->set('webhook_url', $values['webhook_url']);

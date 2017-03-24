@@ -1,4 +1,4 @@
 services:
-  projects_stats.slack_message:
+  projects_stats.slack_service:
     class: Drupal\projects_stats\ProjectsStatsSlackService
     arguments: ['@config.factory']
