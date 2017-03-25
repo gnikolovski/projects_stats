@@ -1,6 +1,6 @@
-#Projects Stats
+# Projects Stats
 
-##CONTENTS OF THIS FILE
+## CONTENTS OF THIS FILE
 
   * Introduction
   * Requirements
@@ -8,7 +8,7 @@
   * Using the module
   * Author
 
-##INTRODUCTION
+## INTRODUCTION
 
 Are you a module or theme developer? Have you created several modules, themes or
 distributions and you want to see how popular they are? Probably not. But if you 
@@ -18,16 +18,16 @@ provides a block, which displays a table with project names, downloads count and
 some additional stats. Another great option is a Slack integration. You can 
 receive downloads count directly to your Slack channel.
 
-##REQUIREMENTS
+## REQUIREMENTS
 
 None.
 
-##INSTALLATION
+## INSTALLATION
 
 1. Install module as usual via Drupal UI, Drush or Composer
 2. Go to "Extend" and enable the Projects Stats module.
 
-##USING THE MODULE
+## USING THE MODULE
 
 After you install the module, go to the block layout 'admin/structure/block' and
 add a 'Projects Stats' block. After you click 'Place block' button, you will see
@@ -45,10 +45,10 @@ message. If you choose to use Drupal's cron, then sending interval will depend
 on the cron settings. Recommended option is to use the external cron job,
 because then you can fine-tune when it runs.
 
-###AUTHOR
+### AUTHOR
 
 Goran Nikolovski  
-Website: (http://www.gorannikolovski.com)  
+Website: (http://gorannikolovski.com)  
 Drupal: (https://www.drupal.org/user/3451979)  
 Email: nikolovski84@gmail.com  
 
