@@ -48,11 +48,11 @@ because then you can fine-tune when it runs.
 ### AUTHOR
 
 Goran Nikolovski  
-Website: (http://gorannikolovski.com)  
-Drupal: (https://www.drupal.org/user/3451979)  
+Website: http://gorannikolovski.com  
+Drupal: https://www.drupal.org/user/3451979  
 Email: nikolovski84@gmail.com  
 
 Company: Studio Present, Subotica, Serbia  
-Website: (http://www.studiopresent.com)  
-Drupal: (https://www.drupal.org/studio-present)  
+Website: http://www.studiopresent.com  
+Drupal: https://www.drupal.org/studio-present  
 Email: info@studiopresent.com  
