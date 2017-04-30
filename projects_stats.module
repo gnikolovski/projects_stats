@@ -26,7 +26,9 @@ function projects_stats_theme($existing, $type, $theme, $path) {
  */
 function projects_stats_cron() {
   $config = \Drupal::config('projects_stats.settings');
-  if ($config->get('send_stats_to_slack') && $config->get('sending_type') == 'drupal_cron') {
+  if ($config->get('send_stats_to_slack')
+    && $config->get('sending_type') == 'drupal_cron'
+  ) {
     $slack_service = \Drupal::service('projects_stats.slack_service');
     $slack_service->sendMessage();
   }

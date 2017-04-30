@@ -60,13 +60,16 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
     $base_url = 'https://www.drupal.org/api-d7/node.json?field_project_machine_name=';
     $client = new Client();
     try {
-      $res = $client->get($base_url . $machine_name, ['http_errors' => FALSE]);
+      $res = $client->get($base_url . $machine_name, [
+        'http_errors' => FALSE
+      ]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
       if (!isset($decoded_body['list'][0])) {
         return $this->t('n/a');
       }
-      $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' . $decoded_body['list'][0]['field_download_count'] . '_';
+      $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' .
+        $decoded_body['list'][0]['field_download_count'] . '_';
       return $downloads_count;
     }
     catch (RequestException $e) {
