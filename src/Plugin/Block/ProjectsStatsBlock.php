@@ -72,7 +72,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $form['machine_names'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Project machine names'),
-      '#description' => $this->t('Specify modules/themes/distributions by using their machine names. Separate multiple values by a comma.'),
+      '#description' => $this->t('Specify modules/themes/distributions by using their machine names. You can also enter user ID to fetch all projects associated with that user. Separate multiple values by a comma.'),
       '#default_value' => $this->configuration['machine_names'],
       '#required' => true,
     ];
@@ -144,7 +144,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    */
   public function build() {
     $machine_names = $this->configuration['machine_names'];
-    $machine_names = explode(',', $machine_names);
+    $machine_names = array_map('trim', explode(',', $machine_names));
     $additional_columns = $this->configuration['additional_columns'];
     $sort_by = $this->configuration['sort_by'];
     $cache_age = $this->configuration['cache_age'];
@@ -160,6 +160,17 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         $table_head[] = $key;
       }
     }
+
+    foreach ($machine_names as $key => $machine_name) {
+      if (is_numeric($machine_name)) {
+        unset($machine_names[$key]);
+        foreach (['project_distribution', 'project_module', 'project_theme'] as $project_type) {
+          $machine_names_by_author = $this->getProjectsByAuthor($project_type, $machine_name);
+          $machine_names = array_merge($machine_names, $machine_names_by_author);
+        }
+      }
+    }
+    $machine_names = array_unique($machine_names);
 
     $table_body = [];
     foreach ($machine_names as $machine_name) {
@@ -267,6 +278,32 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     }
     else {
       return strcmp($a['title'][0], $b['title'][0]);
+    }
+  }
+
+  /**
+   * Get projects filtered by user ID.
+   */
+  private function getProjectsByAuthor($project_type, $author_uid) {
+    $base_url = 'https://www.drupal.org/api-d7/node.json';
+    $client = new Client();
+    try {
+      $res = $client->get($base_url . '?type=' . $project_type . '&author=' . $author_uid, [
+        'http_errors' => FALSE
+      ]);
+      $body = $res->getBody();
+      $decoded_body = json_decode($body, TRUE);
+      $projects = [];
+      if (!isset($decoded_body['list'])) {
+        return [];
+      }
+      foreach ($decoded_body['list'] as $item) {
+        $projects[] = $item['field_project_machine_name'];
+      }
+      return $projects;
+    }
+    catch (RequestException $e) {
+      return [];
     }
   }
 
