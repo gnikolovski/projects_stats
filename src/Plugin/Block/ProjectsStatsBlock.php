@@ -253,8 +253,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     foreach ($machine_names as $machine_name) {
       $stats = $this->getStats(trim($machine_name));
       $table_body[] = [
-        'title' => ucfirst(str_replace('_', ' ', trim($machine_name))),
-        'url' => Url::fromUri('https://www.drupal.org/project/' . trim($machine_name)),
+        'title' => $stats['name'],
+        'url' => $stats['url'],
         'downloads' => number_format($stats['download_count'], 0, '.', ','),
         'downloads_raw' => $stats['download_count'],
         'created' => $additional_columns['created'] !== 0 ? $stats['created'] : NULL,
