@@ -191,7 +191,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     }
 
     return [
-      '#theme' => 'projects_stats',
+      '#theme' => 'projects_stats_table',
       '#table_head' => $table_head,
       '#table_body' => $table_body,
       '#target' => $target == TRUE ? '_blank' : '_self',
