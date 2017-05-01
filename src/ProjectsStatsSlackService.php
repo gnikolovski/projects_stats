@@ -11,7 +11,7 @@ use GuzzleHttp\Exception\RequestException;
  *
  * @package Drupal\projects_stats
  */
-class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
+class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
 
   /**
    * @var \Drupal\Core\Config\ImmutableConfig
@@ -41,11 +41,22 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
    */
   protected function createMessage() {
     $machine_names = $this->config->get('machine_names');
-    $machine_names = explode(',', $machine_names);
+    $machine_names = array_map('trim', explode(',', $machine_names));
+
+    foreach ($machine_names as $key => $machine_name) {
+      if (is_numeric($machine_name)) {
+        unset($machine_names[$key]);
+        foreach (['project_distribution', 'project_module', 'project_theme'] as $project_type) {
+          $machine_names_by_author = $this->getProjectsByAuthor($project_type, $machine_name);
+          $machine_names = array_merge($machine_names, $machine_names_by_author);
+        }
+      }
+    }
+    $machine_names = array_unique($machine_names);
 
     $message =  t('Downloads') . ':' . PHP_EOL;
     foreach ($machine_names as $machine_name) {
-      $message .= $this->getDownloadsCount(trim($machine_name)) . PHP_EOL;
+      $message .= $this->getDownloadsCount($machine_name) . PHP_EOL;
     }
 
     return [
@@ -77,4 +88,31 @@ class ProjectsStatsSlackService implements ProjectsStatsServiceInterface {
       return $this->t('n/a');
     }
   }
+
+  /**
+   * Get projects filtered by user ID.
+   */
+  public function getProjectsByAuthor($project_type, $author_uid) {
+    $base_url = 'https://www.drupal.org/api-d7/node.json';
+    $client = new Client();
+    try {
+      $res = $client->get($base_url . '?type=' . $project_type . '&author=' . $author_uid, [
+        'http_errors' => FALSE
+      ]);
+      $body = $res->getBody();
+      $decoded_body = json_decode($body, TRUE);
+      $projects = [];
+      if (!isset($decoded_body['list'])) {
+        return [];
+      }
+      foreach ($decoded_body['list'] as $item) {
+        $projects[] = $item['field_project_machine_name'];
+      }
+      return $projects;
+    }
+    catch (RequestException $e) {
+      return [];
+    }
+  }
+
 }
