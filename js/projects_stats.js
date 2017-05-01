@@ -1,7 +1,7 @@
 (function ($) {
   'use strict';
   $(document).ready(function () {
-    if (drupalSettings.collapsibleMenu === 0) {
+    if (drupalSettings.collapsibleList === 0) {
       return;
     }
 
