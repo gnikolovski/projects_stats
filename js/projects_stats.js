@@ -5,7 +5,7 @@
       return;
     }
 
-    $('.all-projects ul').hide();
+    $('.projects').hide();
 
     $('.project-type > a').on('click', function (e) {
       e.preventDefault();
