@@ -18,6 +18,14 @@ function projects_stats_theme($existing, $type, $theme, $path) {
         'target' => '_self',
       ],
     ],
+    'projects_stats_list' => [
+      'variables' => [
+        'classes' => '',
+        'all_projects' => [],
+        'show_downloads' => TRUE,
+        'target' => '_self',
+      ],
+    ],
   ];
 }
 
