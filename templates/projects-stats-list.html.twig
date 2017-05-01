@@ -1,7 +1,7 @@
 <ul{{ attributes.addClass(classes) }}>
   {% for project_type, projects in all_projects %}
     <li class="project-type">
-      <a href="#">{% trans %}{{ project_type }}{% endtrans %}</a>
+      <a href="#">{{ project_type }}</a>
       <ul class="projects">
         {% for project in projects %}
           <li class="project">
