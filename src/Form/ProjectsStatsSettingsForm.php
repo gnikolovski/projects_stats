@@ -50,7 +50,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
     $form['slack_integration']['machine_names'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Project machine names'),
-      '#description' => $this->t('Specify modules/themes/distributions by using their machine names. Separate multiple values by a comma.'),
+      '#description' => $this->t('Specify modules/themes/distributions by using their machine names. You can also enter user ID to fetch all projects associated with that user. Separate multiple values by a comma.'),
       '#default_value' => $config->get('machine_names'),
       '#required' => true,
       '#states' => [
