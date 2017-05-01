@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\RequestException;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use SimpleXMLElement;
+use Drupal\projects_stats\ProjectsStatsSlackServiceInterface;
 
 /**
  * Provides a 'ProjectsStatsBlock' block.
@@ -23,6 +24,11 @@ use SimpleXMLElement;
 class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * @var \Drupal\projects_stats\ProjectsStatsSlackServiceInterface
+   */
+  protected $slackService;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -31,13 +37,17 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\projects_stats\ProjectsStatsSlackServiceInterface $slack_service
+   *   The Slack service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
-    $plugin_definition
+    $plugin_definition,
+    ProjectsStatsSlackServiceInterface $slack_service
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->slackService = $slack_service;
   }
 
   /**
@@ -47,7 +57,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition
+      $plugin_definition,
+      $container->get('projects_stats.slack_service')
     );
   }
 
@@ -56,10 +67,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    */
   public function defaultConfiguration() {
     return [
+      'display_type' => 'table',
       'machine_names' => '',
       'additional_columns' => [],
+      'show_downloads' => TRUE,
+      'collapsible_list' => FALSE,
       'sort_by' => 'count',
-      'cache_age' => 21600,
+      'cache_age' => 86400,
       'classes' => '',
       'target' => true,
     ];
@@ -69,6 +83,16 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+    $form['display_type'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Display type'),
+      '#options' => [
+        'table' => $this->t('Table'),
+        'list' => $this->t('List'),
+      ],
+      '#default_value' => $this->configuration['display_type'],
+    ];
+
     $form['machine_names'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Project machine names'),
@@ -86,6 +110,39 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'last_version' => $this->t('Last released version'),
       ],
       '#default_value' => $this->configuration['additional_columns'],
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="settings[display_type]"]' => ['value' => 'table'],
+          ],
+        ],
+      ],
+    ];
+
+    $form['show_downloads'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show download count'),
+      '#default_value' => $this->configuration['show_downloads'],
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="settings[display_type]"]' => ['value' => 'list'],
+          ],
+        ],
+      ],
+    ];
+
+    $form['collapsible_list'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Make list collapsible'),
+      '#default_value' => $this->configuration['collapsible_list'],
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="settings[display_type]"]' => ['value' => 'list'],
+          ],
+        ],
+      ],
     ];
 
     $form['sort_by'] = [
@@ -97,6 +154,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'no' => $this->t('No sort'),
       ],
       '#default_value' => $this->configuration['sort_by'],
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="settings[display_type]"]' => ['value' => 'table'],
+          ],
+        ],
+      ],
     ];
 
     $form['cache_age'] = [
@@ -131,8 +195,11 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['display_type'] = $form_state->getValue('display_type');
     $this->configuration['machine_names'] = $form_state->getValue('machine_names');
     $this->configuration['additional_columns'] = $form_state->getValue('additional_columns');
+    $this->configuration['show_downloads'] = $form_state->getValue('show_downloads');
+    $this->configuration['collapsible_list'] = $form_state->getValue('collapsible_list');
     $this->configuration['sort_by'] = $form_state->getValue('sort_by');
     $this->configuration['cache_age'] = $form_state->getValue('cache_age');
     $this->configuration['classes'] = $form_state->getValue('classes');
@@ -145,6 +212,16 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   public function build() {
     $machine_names = $this->configuration['machine_names'];
     $machine_names = array_map('trim', explode(',', $machine_names));
+
+    if ($this->configuration['display_type'] == 'table') {
+      return $this->generateTable($machine_names);
+    }
+    else {
+      return $this->generateList($machine_names);
+    }
+  }
+
+  private function generateTable($machine_names) {
     $additional_columns = $this->configuration['additional_columns'];
     $sort_by = $this->configuration['sort_by'];
     $cache_age = $this->configuration['cache_age'];
@@ -165,7 +242,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       if (is_numeric($machine_name)) {
         unset($machine_names[$key]);
         foreach (['project_distribution', 'project_module', 'project_theme'] as $project_type) {
-          $machine_names_by_author = $this->getProjectsByAuthor($project_type, $machine_name);
+          $machine_names_by_author = $this->slackService->getProjectsByAuthor($project_type, $machine_name);
           $machine_names = array_merge($machine_names, $machine_names_by_author);
         }
       }
@@ -195,8 +272,50 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#table_head' => $table_head,
       '#table_body' => $table_body,
       '#target' => $target == TRUE ? '_blank' : '_self',
-      '#classes' => $classes,
+      '#classes' => ltrim($classes . ' all-projects'),
       '#cache' => ['max-age' => $cache_age],
+    ];
+  }
+
+  private function generateList($machine_names) {
+    $show_downloads = $this->configuration['show_downloads'];
+    $cache_age = $this->configuration['cache_age'];
+    $classes = $this->configuration['classes'];
+    $target = $this->configuration['target'];
+
+    foreach ($machine_names as $key => $machine_name) {
+      if (is_numeric($machine_name)) {
+        unset($machine_names[$key]);
+        foreach (['project_distribution', 'project_module', 'project_theme'] as $project_type) {
+          $machine_names_by_author = $this->slackService->getProjectsByAuthor($project_type, $machine_name);
+          $machine_names = array_merge($machine_names, $machine_names_by_author);
+        }
+      }
+    }
+    $machine_names = array_unique($machine_names);
+
+    $all_projects = [];
+    foreach ($machine_names as $machine_name) {
+      $stats = $this->getStats(trim($machine_name));
+      $project_type = str_replace('project_', '', $stats['project_type']) . 's';
+      $all_projects[ucfirst($project_type)][] = $stats;
+    }
+
+    return [
+      '#theme' => 'projects_stats_list',
+      '#all_projects' => $all_projects,
+      '#show_downloads' => $show_downloads,
+      '#target' => $target == TRUE ? '_blank' : '_self',
+      '#classes' => ltrim($classes . ' all-projects'),
+      '#cache' => ['max-age' => $cache_age],
+      '#attached' => [
+        'library' => [
+          'projects_stats/projects_stats',
+        ],
+        'drupalSettings' => [
+          'collapsibleList' => $this->configuration['collapsible_list'],
+        ],
+      ],
     ];
   }
 
@@ -212,18 +331,26 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $decoded_body = json_decode($body, TRUE);
       if (!isset($decoded_body['list'][0])) {
         return [
+          'project_type' => '',
+          'name' => '',
+          'url' => '',
           'download_count' => 0,
           'created' => $this->t('n/a'),
           'changed' => $this->t('n/a'),
           'last_version' => $this->t('n/a'),
         ];
       }
+      $project_type = $decoded_body['list'][0]['type'];
+      $name = ucfirst(str_replace('_', ' ', trim($machine_name)));
       $download_count = $decoded_body['list'][0]['field_download_count'];
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
       $changed = $version_data['changed'];
       $last_version = $version_data['last_version'];
       $stats = [
+        'project_type' => $project_type,
+        'name' => $name,
+        'url' => Url::fromUri('https://www.drupal.org/project/' . trim($machine_name)),
         'download_count' => $download_count,
         'created' => date('d-m-Y', $created),
         'changed' => $changed,
@@ -234,6 +361,9 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     catch (RequestException $e) {
       drupal_set_message($e->getMessage());
       $stats = [
+        'project_type' => '',
+        'name' => '',
+        'url' => '',
         'download_count' => 0,
         'created' => $this->t('n/a'),
         'changed' => $this->t('n/a'),
@@ -278,32 +408,6 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     }
     else {
       return strcmp($a['title'][0], $b['title'][0]);
-    }
-  }
-
-  /**
-   * Get projects filtered by user ID.
-   */
-  private function getProjectsByAuthor($project_type, $author_uid) {
-    $base_url = 'https://www.drupal.org/api-d7/node.json';
-    $client = new Client();
-    try {
-      $res = $client->get($base_url . '?type=' . $project_type . '&author=' . $author_uid, [
-        'http_errors' => FALSE
-      ]);
-      $body = $res->getBody();
-      $decoded_body = json_decode($body, TRUE);
-      $projects = [];
-      if (!isset($decoded_body['list'])) {
-        return [];
-      }
-      foreach ($decoded_body['list'] as $item) {
-        $projects[] = $item['field_project_machine_name'];
-      }
-      return $projects;
-    }
-    catch (RequestException $e) {
-      return [];
     }
   }
 
