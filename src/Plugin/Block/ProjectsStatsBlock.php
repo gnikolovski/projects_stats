@@ -76,6 +76,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       'cache_age' => 86400,
       'classes' => '',
       'target' => true,
+      'description' => '',
     ];
   }
 
@@ -114,6 +115,20 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'visible' => [
           [
             ':input[name="settings[display_type]"]' => ['value' => 'table'],
+          ],
+        ],
+      ],
+    ];
+
+    $form['description'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Description'),
+      '#description' => $this->t('Description text is displayed above the projects list.'),
+      '#default_value' => $this->configuration['description'],
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="settings[display_type]"]' => ['value' => 'list'],
           ],
         ],
       ],
@@ -198,6 +213,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $this->configuration['display_type'] = $form_state->getValue('display_type');
     $this->configuration['machine_names'] = $form_state->getValue('machine_names');
     $this->configuration['additional_columns'] = $form_state->getValue('additional_columns');
+    $this->configuration['description'] = $form_state->getValue('description');
     $this->configuration['show_downloads'] = $form_state->getValue('show_downloads');
     $this->configuration['collapsible_list'] = $form_state->getValue('collapsible_list');
     $this->configuration['sort_by'] = $form_state->getValue('sort_by');
@@ -282,6 +298,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
 
   private function generateList($machine_names) {
     $show_downloads = $this->configuration['show_downloads'];
+    $description = $this->configuration['description'];
     $cache_age = $this->configuration['cache_age'];
     $classes = $this->configuration['classes'];
     $target = $this->configuration['target'];
@@ -311,6 +328,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#theme' => 'projects_stats_list',
       '#all_projects' => $all_projects,
       '#show_downloads' => $show_downloads,
+      '#description' => $description,
       '#target' => $target == TRUE ? '_blank' : '_self',
       '#classes' => ltrim($classes . ' all-projects'),
       '#cache' => ['max-age' => $cache_age],

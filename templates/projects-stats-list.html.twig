@@ -1,4 +1,9 @@
 <ul{{ attributes.addClass(classes) }}>
+  {% if description %}
+    <span class="projects-stats-description">
+      {{ description }}
+    </span>
+  {% endif %}
   {% for project_type, projects in all_projects %}
     <li class="project-type">
       <a href="#">{{ project_type }}</a>

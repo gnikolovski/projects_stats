@@ -20,6 +20,7 @@ function projects_stats_theme($existing, $type, $theme, $path) {
     ],
     'projects_stats_list' => [
       'variables' => [
+        'description' => '',
         'classes' => '',
         'all_projects' => [],
         'show_downloads' => TRUE,
