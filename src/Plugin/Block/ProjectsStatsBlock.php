@@ -330,7 +330,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#show_downloads' => $show_downloads,
       '#description' => $description,
       '#target' => $target == TRUE ? '_blank' : '_self',
-      '#classes' => ltrim($classes . ' all-projects'),
+      '#classes' => $classes,
       '#cache' => ['max-age' => $cache_age],
       '#attached' => [
         'library' => [

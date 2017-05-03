@@ -1,22 +1,24 @@
-<ul{{ attributes.addClass(classes) }}>
+<div{{ attributes.addClass(classes) }}>
   {% if description %}
-    <span class="projects-stats-description">
+    <div class="projects-stats-description">
       {{ description }}
-    </span>
+    </div>
   {% endif %}
-  {% for project_type, projects in all_projects %}
-    <li class="project-type">
-      <a href="#">{{ project_type }}</a>
-      <ul class="projects">
-        {% for project in projects %}
-          <li class="project">
-            {{ link(project.name, project.url, {'target': target, 'class': ['project-name']}) }}
-            {% if show_downloads %}
-              <span class="project-download-count">{{ project.download_count }}</span>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    </li>
-  {% endfor %}
-</ul>
+  <ul class="all-projects">
+    {% for project_type, projects in all_projects %}
+      <li class="project-type">
+        <a href="#">{{ project_type }}</a>
+        <ul class="projects">
+          {% for project in projects %}
+            <li class="project">
+              {{ link(project.name, project.url, {'target': target, 'class': ['project-name']}) }}
+              {% if show_downloads %}
+                <span class="project-download-count">{{ project.download_count }}</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
