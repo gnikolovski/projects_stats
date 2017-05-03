@@ -347,7 +347,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         ];
       }
       $project_type = $decoded_body['list'][0]['type'];
-      $name = ucfirst(str_replace('_', ' ', trim($machine_name)));
+      $name = $decoded_body['list'][0]['title'];
       $download_count = $decoded_body['list'][0]['field_download_count'];
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
