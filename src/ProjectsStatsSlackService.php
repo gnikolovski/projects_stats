@@ -56,7 +56,11 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
 
     $message =  t('Downloads') . ':' . PHP_EOL;
     foreach ($machine_names as $machine_name) {
-      $message .= $this->getDownloadsCount($machine_name) . PHP_EOL;
+      $downloads_count = $this->getDownloadsCount($machine_name);
+      if ($downloads_count == 'n/a') {
+        continue;
+      }
+      $message .= $downloads_count . PHP_EOL;
     }
 
     return [
@@ -77,7 +81,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
       if (!isset($decoded_body['list'][0])) {
-        return $this->t('n/a');
+        return 'n/a';
       }
       $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' .
         $decoded_body['list'][0]['field_download_count'] . '_';
@@ -85,7 +89,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     }
     catch (RequestException $e) {
       drupal_set_message($e->getMessage());
-      return $this->t('n/a');
+      return 'n/a';
     }
   }
 
