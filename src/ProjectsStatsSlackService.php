@@ -80,7 +80,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
       ]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
-      if (!isset($decoded_body['list'][0])) {
+      if (!isset($decoded_body['list'][0]) || empty($decoded_body['list'][0]['field_download_count'])) {
         return 'n/a';
       }
       $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' .
