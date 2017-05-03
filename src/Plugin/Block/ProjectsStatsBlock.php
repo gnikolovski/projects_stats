@@ -252,6 +252,9 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $table_body = [];
     foreach ($machine_names as $machine_name) {
       $stats = $this->getStats(trim($machine_name));
+      if (empty($stats['project_type']) || empty($stats['name']) || $stats['download_count'] == NULL) {
+        continue;
+      }
       $table_body[] = [
         'title' => $stats['name'],
         'url' => $stats['url'],
@@ -297,6 +300,9 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $all_projects = [];
     foreach ($machine_names as $machine_name) {
       $stats = $this->getStats(trim($machine_name));
+      if (empty($stats['project_type']) || empty($stats['name']) || $stats['download_count'] == NULL) {
+        continue;
+      }
       $project_type = str_replace('project_', '', $stats['project_type']) . 's';
       $all_projects[ucfirst($project_type)][] = $stats;
     }
