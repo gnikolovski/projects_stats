@@ -13,9 +13,11 @@
       var isChildVisible = $(this).parent().children('.projects').is(':visible');
       if (isChildVisible) {
         $(this).parent().children('.projects').slideUp();
+        $(this).parent().removeClass('active');
       }
       else {
         $(this).parent().children('.projects').slideDown();
+        $(this).parent().addClass('active');
       }
     });
   });
