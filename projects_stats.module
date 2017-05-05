@@ -13,6 +13,7 @@ function projects_stats_theme($existing, $type, $theme, $path) {
     'projects_stats_table' => [
       'variables' => [
         'classes' => '',
+        'description' => '',
         'table_head' => [],
         'table_body' => [],
         'target' => '_self',
@@ -20,11 +21,11 @@ function projects_stats_theme($existing, $type, $theme, $path) {
     ],
     'projects_stats_list' => [
       'variables' => [
-        'description' => '',
         'classes' => '',
+        'description' => '',
         'all_projects' => [],
-        'show_downloads' => TRUE,
         'target' => '_self',
+        'show_downloads' => TRUE,
       ],
     ],
   ];

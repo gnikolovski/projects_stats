@@ -1,16 +1,23 @@
-<table{{ attributes.addClass(classes) }}>
-  <tr>
-    {% for cell in table_head %}
-      <th>{{ cell }}</th>
-    {% endfor %}
-  </tr>
-  {% for cell in table_body %}
+<div{{ attributes.addClass(classes) }}>
+  {% if description %}
+    <div class="block-projects-stats__description">
+      {{ description }}
+    </div>
+  {% endif %}
+  <table class="block-projects-stats__projects">
     <tr>
-      <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
-      <td>{{ cell.downloads }}</td>
-      {% if cell.created %}<td>{{ cell.created }}</td>{% endif %}
-      {% if cell.changed %}<td>{{ cell.changed }}</td>{% endif %}
-      {% if cell.last_version %}<td>{{ cell.last_version }}</td>{% endif %}
+      {% for cell in table_head %}
+        <th>{{ cell }}</th>
+      {% endfor %}
     </tr>
-  {% endfor %}
-</table>
+    {% for cell in table_body %}
+      <tr>
+        <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
+        <td>{{ cell.downloads }}</td>
+        {% if cell.created %}<td>{{ cell.created }}</td>{% endif %}
+        {% if cell.changed %}<td>{{ cell.changed }}</td>{% endif %}
+        {% if cell.last_version %}<td>{{ cell.last_version }}</td>{% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+</div>
