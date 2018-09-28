@@ -55,7 +55,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     }
     $machine_names = array_unique($machine_names);
 
-    $message = $this->t('Downloads') . ':' . PHP_EOL;
+    $message = t('Downloads') . ':' . PHP_EOL;
     foreach ($machine_names as $machine_name) {
       $downloads_count = $this->getDownloadsCount($machine_name);
       if ($downloads_count == 'n/a') {
