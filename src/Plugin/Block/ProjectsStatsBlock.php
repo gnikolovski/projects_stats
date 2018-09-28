@@ -25,6 +25,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
 
   /**
    * @var \Drupal\projects_stats\ProjectsStatsSlackServiceInterface
+   *   The Slack service.
    */
   protected $slackService;
 
@@ -76,7 +77,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       'collapsible_list' => FALSE,
       'cache_age' => 86400,
       'classes' => '',
-      'target' => true,
+      'target' => TRUE,
     ];
   }
 
@@ -99,7 +100,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#title' => $this->t('Project machine names'),
       '#description' => $this->t('Specify modules/themes/distributions by using their machine names. You can also enter user ID to fetch all projects associated with that user. Separate multiple values by a comma.'),
       '#default_value' => $this->configuration['machine_names'],
-      '#required' => true,
+      '#required' => TRUE,
     ];
 
     $form['description'] = [
@@ -230,6 +231,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     }
   }
 
+  /**
+   * Generates table.
+   *
+   * @param $machine_names
+   *
+   * @return array
+   */
   private function generateTable($machine_names) {
     $description = $this->configuration['description'];
     $additional_columns = $this->configuration['additional_columns'];
@@ -291,6 +299,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     ];
   }
 
+  /**
+   * Generates list.
+   *
+   * @param $machine_names
+   *
+   * @return array
+   */
   private function generateList($machine_names) {
     $show_downloads = $this->configuration['show_downloads'];
     $description = $this->configuration['description'];

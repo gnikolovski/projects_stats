@@ -8,5 +8,12 @@ namespace Drupal\projects_stats;
  * @package Drupal\projects_stats
  */
 interface ProjectsStatsSlackServiceInterface {
-  function sendMessage();
+
+  /**
+   * Sends message.
+   *
+   * @return mixed
+   */
+  public function sendMessage();
+  
 }

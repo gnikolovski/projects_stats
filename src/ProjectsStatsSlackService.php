@@ -15,6 +15,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
 
   /**
    * @var \Drupal\Core\Config\ImmutableConfig
+   *   The Immutable config.
    */
   protected $config;
 
@@ -31,7 +32,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
   public function sendMessage() {
     $webhook_url = $this->config->get('webhook_url');
     $client = new Client();
-    $response = $client->post($webhook_url, [
+    $client->post($webhook_url, [
       'body' => json_encode($this->createMessage()),
     ]);
   }
@@ -54,7 +55,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     }
     $machine_names = array_unique($machine_names);
 
-    $message =  t('Downloads') . ':' . PHP_EOL;
+    $message = $this->t('Downloads') . ':' . PHP_EOL;
     foreach ($machine_names as $machine_name) {
       $downloads_count = $this->getDownloadsCount($machine_name);
       if ($downloads_count == 'n/a') {
@@ -76,7 +77,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     $client = new Client();
     try {
       $res = $client->get($base_url . $machine_name, [
-        'http_errors' => FALSE
+        'http_errors' => FALSE,
       ]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
@@ -101,7 +102,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     $client = new Client();
     try {
       $res = $client->get($base_url . '?type=' . $project_type . '&author=' . $author_uid, [
-        'http_errors' => FALSE
+        'http_errors' => FALSE,
       ]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);

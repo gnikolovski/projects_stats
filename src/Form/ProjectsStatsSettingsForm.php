@@ -35,11 +35,11 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('projects_stats.settings');
 
-    $form['slack_integration'] = array(
+    $form['slack_integration'] = [
       '#type' => 'details',
       '#title' => $this->t('Slack integration'),
-      '#open' => true,
-    );
+      '#open' => TRUE,
+    ];
 
     $form['slack_integration']['send_stats_to_slack'] = [
       '#type' => 'checkbox',
@@ -52,10 +52,10 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Project machine names'),
       '#description' => $this->t('Specify modules/themes/distributions by using their machine names. You can also enter user ID to fetch all projects associated with that user. Separate multiple values by a comma.'),
       '#default_value' => $config->get('machine_names'),
-      '#required' => true,
+      '#required' => TRUE,
       '#states' => [
         'visible' => [
-          ':input[name="send_stats_to_slack"]' => ['checked' => true],
+          ':input[name="send_stats_to_slack"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -66,10 +66,10 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#size' => 255,
       '#description' => $this->t('Go to your <a target="_blank" href="https://slack.com/services/new/incoming-webhook">Slack settings</a> and add an integration. After you create an integration you will get a url, which you need to copy to this field.'),
       '#default_value' => $config->get('webhook_url'),
-      '#required' => true,
+      '#required' => TRUE,
       '#states' => [
         'visible' => [
-          ':input[name="send_stats_to_slack"]' => ['checked' => true],
+          ':input[name="send_stats_to_slack"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -85,7 +85,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#default_value' => empty($config->get('sending_type')) ? 'drupal_cron' : $config->get('sending_type'),
       '#states' => [
         'visible' => [
-          ':input[name="send_stats_to_slack"]' => ['checked' => true],
+          ':input[name="send_stats_to_slack"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -99,11 +99,11 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#default_value' => empty($config->get('external_cron_url')) ? $host . '/cron/projects-stats/slack/' . md5(uniqid()) : $config->get('external_cron_url'),
       '#states' => [
         'visible' => [
-          ':input[name="send_stats_to_slack"]' => ['checked' => true],
+          ':input[name="send_stats_to_slack"]' => ['checked' => TRUE],
           ':input[name="sending_type"]' => ['value' => 'external_cron'],
         ],
       ],
-      '#attributes' => array('readonly' => 'readonly'),
+      '#attributes' => ['readonly' => 'readonly'],
     ];
 
     return parent::buildForm($form, $form_state);
