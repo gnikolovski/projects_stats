@@ -5,7 +5,7 @@
   * Introduction
   * Requirements
   * Installation
-  * Using the module
+  * Configuration
   * Author
 
 ## INTRODUCTION
@@ -27,7 +27,7 @@ None.
 1. Install module as usual via Drupal UI, Drush or Composer
 2. Go to "Extend" and enable the Projects Stats module.
 
-## USING THE MODULE
+## CONFIGURATION
 
 After you install the module, go to the block layout 'admin/structure/block' and
 add a 'Projects Stats' block. After you click 'Place block' button, you will see
@@ -49,7 +49,7 @@ because then you can fine-tune when it runs.
 
 Goran Nikolovski  
 Website: http://gorannikolovski.com  
-Drupal: https://www.drupal.org/user/3451979  
+Drupal: https://www.drupal.org/u/gnikolovski  
 Email: nikolovski84@gmail.com  
 
 Company: Studio Present, Subotica, Serbia  
