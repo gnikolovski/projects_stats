@@ -1,0 +1,19 @@
+projects_stats.settings:
+  type: config_object
+  label: 'Projects Stats settings'
+  mapping:
+    send_stats_to_slack:
+      type: boolean
+      label: 'Send downloads count to a Slack channel'
+    machine_names:
+      type: text
+      label: 'Project machine names'
+    webhook_url:
+      type: string
+      label: 'Webhook URL'
+    sending_type:
+      type: string
+      label: 'Sending type'
+    external_cron_url:
+      type: string
+      label: 'External cron url'
