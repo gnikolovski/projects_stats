@@ -248,7 +248,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
 
     $table_head = [$this->t('Title'), $this->t('Downloads')];
     foreach ($additional_columns as $key => $value) {
-      if ($value !== 0) {
+      if ($value) {
         $key = str_replace('_', ' ', $key);
         $key = ucfirst($key);
         $key = $this->t($key);
@@ -273,15 +273,21 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       if (empty($stats['project_type']) || empty($stats['name']) || $stats['download_count'] == NULL) {
         continue;
       }
-      $table_body[] = [
+
+      $table_body_row = [
         'title' => $stats['name'],
         'url' => $stats['url'],
         'downloads' => number_format($stats['download_count'], 0, '.', ','),
         'downloads_raw' => $stats['download_count'],
-        'created' => $additional_columns['created'] !== 0 ? $stats['created'] : NULL,
-        'changed' => $additional_columns['changed'] !== 0 ? $stats['changed'] : NULL,
-        'last_version' => $additional_columns['last_version'] !== 0 ? $stats['last_version'] : NULL,
       ];
+
+      foreach ($additional_columns as $key => $value) {;
+        if ($value && isset($stats[$key])) {
+          $table_body_row[$key] = $stats[$key];
+        }
+      }
+
+      $table_body[] = $table_body_row;
     }
 
     if ($sort_by != 'no') {
