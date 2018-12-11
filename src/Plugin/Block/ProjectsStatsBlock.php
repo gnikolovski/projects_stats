@@ -114,6 +114,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'checkboxes',
       '#title' => $this->t('Additional columns'),
       '#options' => [
+        'project_usage' => $this->t('Usage'),
         'created' => $this->t('Created date'),
         'changed' => $this->t('Last modified date'),
         'last_version' => $this->t('Last released version'),
@@ -238,7 +239,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    *
    * @return array
    */
-  private function generateTable($machine_names) {
+  protected function generateTable($machine_names) {
     $description = $this->configuration['description'];
     $additional_columns = $this->configuration['additional_columns'];
     $sort_by = $this->configuration['sort_by'];
@@ -281,9 +282,9 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'downloads_raw' => $stats['download_count'],
       ];
 
-      foreach ($additional_columns as $key => $value) {;
+      foreach ($additional_columns as $key => $value) {
         if ($value && isset($stats[$key])) {
-          $table_body_row[$key] = $stats[$key];
+          $table_body_row[$key] = $this->flattenValue($stats[$key]);
         }
       }
 
@@ -312,7 +313,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    *
    * @return array
    */
-  private function generateList($machine_names) {
+  protected function generateList($machine_names) {
     $show_downloads = $this->configuration['show_downloads'];
     $description = $this->configuration['description'];
     $cache_age = $this->configuration['cache_age'];
@@ -362,7 +363,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   /**
    * Get data from drupal.org API endpoint.
    */
-  private function getStats($machine_name) {
+  protected function getStats($machine_name) {
     $base_url = 'https://www.drupal.org/api-d7/node.json?field_project_machine_name=';
     $client = new Client();
     try {
@@ -374,7 +375,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
           'project_type' => '',
           'name' => '',
           'url' => '',
-          'download_count' => 0,
+          'download_count' => 'n/a',
+          'project_usage' => 'n/a',
           'created' => $this->t('n/a'),
           'changed' => $this->t('n/a'),
           'last_version' => $this->t('n/a'),
@@ -383,6 +385,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $project_type = $decoded_body['list'][0]['type'];
       $name = $decoded_body['list'][0]['title'];
       $download_count = $decoded_body['list'][0]['field_download_count'];
+      $project_usage = $decoded_body['list'][0]['project_usage'];
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
       $changed = $version_data['changed'];
@@ -392,6 +395,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'name' => $name,
         'url' => Url::fromUri('https://www.drupal.org/project/' . trim($machine_name)),
         'download_count' => $download_count,
+        'project_usage' => $project_usage,
         'created' => date('d-m-Y', $created),
         'changed' => $changed,
         'last_version' => $last_version,
@@ -404,7 +408,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
         'project_type' => '',
         'name' => '',
         'url' => '',
-        'download_count' => 0,
+        'download_count' => 'n/a',
+        'project_usage' => 'n/a',
         'created' => $this->t('n/a'),
         'changed' => $this->t('n/a'),
         'last_version' => $this->t('n/a'),
@@ -416,7 +421,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   /**
    * Get release data from drupal.org API endpoint.
    */
-  private function getLastVersion($machine_name) {
+  protected function getLastVersion($machine_name) {
     $client = new Client();
     try {
       $res = $client->get("https://updates.drupal.org/release-history/$machine_name/all", ['http_errors' => FALSE]);
@@ -441,7 +446,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   /**
    * Sort projects.
    */
-  private function sortModulesList($a, $b) {
+  protected function sortModulesList($a, $b) {
     $sort_by = $this->configuration['sort_by'];
     if ($sort_by == 'count') {
       return $a['downloads_raw'] < $b['downloads_raw'];
@@ -449,6 +454,23 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     else {
       return strcmp($a['title'][0], $b['title'][0]);
     }
+  }
+
+  /**
+   * Flattens array.
+   */
+  protected function flattenValue($data) {
+    if (!is_array($data)) {
+      return $data;
+    }
+
+    $flat = [];
+
+    foreach ($data as $key => $value) {
+      $flat[] = $key . ': ' . $value;
+    }
+
+    return implode(', ', $flat);
   }
 
 }

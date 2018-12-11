@@ -14,6 +14,7 @@
       <tr>
         <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
         <td>{{ cell.downloads }}</td>
+        {% if cell.project_usage %}<td>{{ cell.project_usage }}</td>{% endif %}
         {% if cell.created %}<td>{{ cell.created }}</td>{% endif %}
         {% if cell.changed %}<td>{{ cell.changed }}</td>{% endif %}
         {% if cell.last_version %}<td>{{ cell.last_version }}</td>{% endif %}
