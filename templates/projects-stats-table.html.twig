@@ -14,10 +14,10 @@
       <tr>
         <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
         <td>{{ cell.downloads }}</td>
-        {% if cell.project_usage %}<td>{{ cell.project_usage }}</td>{% endif %}
-        {% if cell.created %}<td>{{ cell.created }}</td>{% endif %}
-        {% if cell.changed %}<td>{{ cell.changed }}</td>{% endif %}
-        {% if cell.last_version %}<td>{{ cell.last_version }}</td>{% endif %}
+        {% if cell.project_usage is defined %}<td>{{ cell.project_usage }}</td>{% endif %}
+        {% if cell.created is defined %}<td>{{ cell.created }}</td>{% endif %}
+        {% if cell.changed is defined %}<td>{{ cell.changed }}</td>{% endif %}
+        {% if cell.last_version is defined %}<td>{{ cell.last_version }}</td>{% endif %}
       </tr>
     {% endfor %}
   </table>
