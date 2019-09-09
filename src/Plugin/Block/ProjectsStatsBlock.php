@@ -3,14 +3,15 @@
 namespace Drupal\projects_stats\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Url;
+use Drupal\projects_stats\ProjectsStatsSlackServiceInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\Core\Url;
-use Drupal\Core\Form\FormStateInterface;
 use SimpleXMLElement;
-use Drupal\projects_stats\ProjectsStatsSlackServiceInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'ProjectsStatsBlock' block.
@@ -24,10 +25,18 @@ use Drupal\projects_stats\ProjectsStatsSlackServiceInterface;
 class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * The Slack service.
+   *
    * @var \Drupal\projects_stats\ProjectsStatsSlackServiceInterface
-   *   The Slack service.
    */
   protected $slackService;
+
+  /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
 
   /**
    * Construct.
@@ -40,15 +49,19 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    *   The plugin implementation definition.
    * @param \Drupal\projects_stats\ProjectsStatsSlackServiceInterface $slack_service
    *   The Slack service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ProjectsStatsSlackServiceInterface $slack_service
+    ProjectsStatsSlackServiceInterface $slack_service,
+    MessengerInterface $messenger
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->slackService = $slack_service;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -59,7 +72,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('projects_stats.slack_service')
+      $container->get('projects_stats.slack_service'),
+      $container->get('messenger')
     );
   }
 
@@ -408,7 +422,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       return $stats;
     }
     catch (RequestException $e) {
-      drupal_set_message($e->getMessage());
+      $this->messenger->addWarning($e->getMessage());
       $stats = [
         'project_type' => '',
         'name' => '',
@@ -440,7 +454,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
     catch (RequestException $e) {
-      drupal_set_message($e->getMessage());
+      $this->messenger->addWarning($e->getMessage());
       return [
         'last_version' => $this->t('n/a'),
         'changed' => $this->t('n/a'),

@@ -3,6 +3,7 @@
 namespace Drupal\projects_stats;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -14,16 +15,30 @@ use GuzzleHttp\Exception\RequestException;
 class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
 
   /**
+   * The Immutable config.
+   *
    * @var \Drupal\Core\Config\ImmutableConfig
-   *   The Immutable config.
    */
   protected $config;
 
   /**
-   * Constructor.
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  protected $messenger;
+
+  /**
+   * ProjectsStatsSlackService constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The Immutable config.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, MessengerInterface $messenger) {
     $this->config = $config_factory->get('projects_stats.settings');
+    $this->messenger = $messenger;
   }
 
   /**
@@ -89,7 +104,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
       return $downloads_count;
     }
     catch (RequestException $e) {
-      drupal_set_message($e->getMessage());
+      $this->messenger->addError($e->getMessage());
       return 'n/a';
     }
   }
