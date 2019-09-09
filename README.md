@@ -48,9 +48,9 @@ because then you can fine-tune when it runs.
 ### AUTHOR
 
 Goran Nikolovski  
-Website: http://gorannikolovski.com  
+Website: https://gorannikolovski.com  
 Drupal: https://www.drupal.org/u/gnikolovski  
-Email: nikolovski84@gmail.com  
+Email: goran@gorannikolovski.com  
 
 Company: Studio Present, Subotica, Serbia  
 Website: http://www.studiopresent.com  
