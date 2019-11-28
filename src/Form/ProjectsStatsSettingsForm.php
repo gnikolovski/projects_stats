@@ -2,8 +2,11 @@
 
 namespace Drupal\projects_stats\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @file
@@ -14,6 +17,37 @@ use Drupal\Core\Form\FormStateInterface;
  * Defines a form that configures projects stats module.
  */
 class ProjectsStatsSettingsForm extends ConfigFormBase {
+
+  /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * Constructs a ThemeSettingsForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   The current request.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, Request $current_request) {
+    parent::__construct($config_factory);
+
+    $this->currentRequest = $current_request;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('request_stack')->getCurrentRequest()
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -78,7 +112,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       '#type' => 'radios',
       '#title' => $this->t('Sending type'),
       '#options' => [
-        'drupal_cron' => $this->t('Use Drupal\'s cron'),
+        'drupal_cron' => $this->t("Use Drupal's cron"),
         'external_cron' => $this->t('Use external cron'),
       ],
       '#description' => $this->t('If you select Drupal\'s cron, then you will receive message on Slack every time the cron is executed. <a target="_blank" href="/admin/config/system/cron">Configure cron here</a>.<br>If you choose the external cron, then you can set up messaging interval according to your needs.'),
@@ -90,7 +124,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
       ],
     ];
 
-    $host = \Drupal::request()->getHost();
+    $host = $this->currentRequest->getHost();
     $form['slack_integration']['external_cron_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('External cron url'),

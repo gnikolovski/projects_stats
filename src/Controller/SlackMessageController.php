@@ -3,16 +3,21 @@
 namespace Drupal\projects_stats\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\projects_stats\ProjectsStatsSlackService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Slack message Controller.
  */
 class SlackMessageController extends ControllerBase {
 
+  /**
+   * The Slack service.
+   *
+   * @var \Drupal\projects_stats\ProjectsStatsSlackService
+   */
   protected $slackService;
 
   /**

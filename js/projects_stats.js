@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Behaviors for the Projects Stats module.
+ */
+
 (function ($) {
   'use strict';
   $(document).ready(function () {

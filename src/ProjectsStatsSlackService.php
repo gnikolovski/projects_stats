@@ -4,6 +4,7 @@ namespace Drupal\projects_stats;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -13,6 +14,8 @@ use GuzzleHttp\Exception\RequestException;
  * @package Drupal\projects_stats
  */
 class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The Immutable config.
@@ -70,7 +73,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     }
     $machine_names = array_unique($machine_names);
 
-    $message = t('Downloads') . ':' . PHP_EOL;
+    $message = $this->t('Downloads:') . PHP_EOL;
     foreach ($machine_names as $machine_name) {
       $downloads_count = $this->getDownloadsCount($machine_name);
       if ($downloads_count == 'n/a') {

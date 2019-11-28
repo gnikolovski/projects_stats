@@ -11,8 +11,6 @@ interface ProjectsStatsSlackServiceInterface {
 
   /**
    * Sends message.
-   *
-   * @return mixed
    */
   public function sendMessage();
 

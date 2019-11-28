@@ -1,4 +1,7 @@
 services:
+  projects_stats.build_service:
+    class: Drupal\projects_stats\ProjectsStatsBuildService
+    arguments: ['@projects_stats.slack_service', '@messenger', '@cache.default']
   projects_stats.slack_service:
     class: Drupal\projects_stats\ProjectsStatsSlackService
     arguments: ['@config.factory', '@messenger']
