@@ -1,33 +1,47 @@
-# Projects Stats
+CONTENTS OF THIS FILE
+---------------------
 
-## CONTENTS OF THIS FILE
+ * Introduction
+ * Requirements
+ * Installation
+ * Configuration
+ * Maintainers
 
-  * Introduction
-  * Requirements
-  * Installation
-  * Configuration
-  * Author
 
-## INTRODUCTION
+INTRODUCTION
+------------
 
 Are you a module or theme developer? Have you created several modules, themes or
-distributions and you want to see how popular they are? Probably not. But if you 
-for some reason need to display a number of downloads for a list of modules, 
+distributions and you want to see how popular they are? Probably not. But if you
+for some reason need to display a number of downloads for a list of modules,
 themes and/or distributions then you should try out this module. Projects Stats
-provides a block, which displays a table or a list with project names, downloads 
-count and some additional stats. Another great option is a Slack integration. 
+provides a block, which displays a table or a list with project names, downloads
+count and some additional stats. Another great option is a Slack integration.
 You can receive downloads count directly to your Slack channel.
 
-## REQUIREMENTS
+ * For a full description of the module, visit the project page:
+   https://www.drupal.org/project/projects_stats
 
-None.
+ * To submit bug reports and feature suggestions, or to track changes:
+   https://www.drupal.org/project/issues/projects_stats
 
-## INSTALLATION
 
-1. Install module as usual via Drupal UI, Drush or Composer
-2. Go to "Extend" and enable the Projects Stats module.
+REQUIREMENTS
+------------
 
-## CONFIGURATION
+This module requires no modules outside of Drupal core.
+
+
+INSTALLATION
+------------
+
+ * Install the Projects Stats module as you would normally install a contributed
+   Drupal module. Visit https://www.drupal.org/node/1897420 for further
+   information.
+
+
+CONFIGURATION
+-------------
 
 After you install the module, go to the block layout 'admin/structure/block' and
 add a 'Projects Stats' block. After you click 'Place block' button, you will see
@@ -45,14 +59,12 @@ message. If you choose to use Drupal's cron, then sending interval will depend
 on the cron settings. Recommended option is to use the external cron job,
 because then you can fine-tune when it runs.
 
-### AUTHOR
 
-Goran Nikolovski  
-Website: https://gorannikolovski.com  
-Drupal: https://www.drupal.org/u/gnikolovski  
-Email: goran@gorannikolovski.com  
+MAINTAINERS
+-----------
 
-Company: Studio Present, Subotica, Serbia  
-Website: http://www.studiopresent.com  
-Drupal: https://www.drupal.org/studio-present  
-Email: info@studiopresent.com  
+Current maintainers:
+ * Goran Nikolovski (gnikolovski) - https://www.drupal.org/u/gnikolovski
+
+This project has been sponsored by:
+ * Studio Present - https://www.drupal.org/studio-present
