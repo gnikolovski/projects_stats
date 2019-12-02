@@ -99,7 +99,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
 
       if ($this->configuration['cache_age']) {
         $expire = time() + $this->configuration['cache_age'];
-        $this->cache->set($cid, $data, $expire);
+        $this->cache->set($cid, $data, $expire, ['projects_stats:config_form']);
       }
 
       return $data;

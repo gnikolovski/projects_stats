@@ -4,6 +4,7 @@ namespace Drupal\projects_stats\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableDependencyTrait;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\projects_stats\ProjectsStatsBuildService;
@@ -30,6 +31,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
   protected $projectsStatsBuildService;
 
   /**
+   * The cache tags invalidator service.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
+   */
+  protected $cacheTagsInvalidator;
+
+  /**
    * Constructs a new FieldBlock.
    *
    * @param array $configuration
@@ -40,10 +48,13 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
    *   The plugin implementation definition.
    * @param \Drupal\projects_stats\ProjectsStatsBuildService $projects_stats_build_service
    *   The Projects Stats build service.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
+   *   The cache tags invalidator service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProjectsStatsBuildService $projects_stats_build_service) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProjectsStatsBuildService $projects_stats_build_service, CacheTagsInvalidatorInterface $cache_tags_invalidator) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->projectsStatsBuildService = $projects_stats_build_service;
+    $this->cacheTagsInvalidator = $cache_tags_invalidator;
   }
 
   /**
@@ -54,7 +65,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('projects_stats.build_service')
+      $container->get('projects_stats.build_service'),
+      $container->get('cache_tags.invalidator')
     );
   }
 
@@ -215,6 +227,8 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $this->configuration['cache_age'] = $form_state->getValue('cache_age');
     $this->configuration['classes'] = $form_state->getValue('classes');
     $this->configuration['target'] = $form_state->getValue('target');
+
+    $this->cacheTagsInvalidator->invalidateTags(['projects_stats:config_form']);
   }
 
   /**
