@@ -32,6 +32,16 @@ REQUIREMENTS
 This module requires no modules outside of Drupal core.
 
 
+RECOMMENDED MODULES
+-------------------
+
+In order to get the best possible performance, please install the following
+modules:
+
+ * BigPipe (core module)
+ * Sessionless BigPipe (https://www.drupal.org/project/big_pipe_sessionless)
+
+
 INSTALLATION
 ------------
 
