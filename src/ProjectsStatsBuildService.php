@@ -301,7 +301,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       $res = $client->get("https://updates.drupal.org/release-history/$machine_name/all", ['http_errors' => FALSE]);
       $xml = $res->getBody()->getContents();
       $versions = new SimpleXMLElement($xml);
-      $last_version = isset($versions->releases->release->version) ? $versions->releases->release->version : 'n/a';
+      $last_version = isset($versions->releases->release->version) ? $versions->releases->release->version->__toString() : 'n/a';
       $changed = isset($versions->releases->release->date) ? date('d-m-Y', $versions->releases->release->date->__toString()) : 'n/a';
       return [
         'last_version' => $last_version,
