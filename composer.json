@@ -12,7 +12,7 @@
         }
     ],
     "support": {
-        "issues": "https://www.drupal.org/node/add/project-issue/projects_stats",
+        "issues": "https://www.drupal.org/project/issues/projects_stats",
         "email": "goran@gorannikolovski.com"
     },
     "license": "GPL-2.0+",
