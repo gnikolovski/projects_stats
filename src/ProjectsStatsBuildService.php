@@ -258,7 +258,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       }
       $project_type = $decoded_body['list'][0]['type'];
       $name = $decoded_body['list'][0]['title'];
-      $download_count = $decoded_body['list'][0]['field_download_count'];
+      $download_count = (int) $decoded_body['list'][0]['field_download_count'];
       $project_usage = $decoded_body['list'][0]['project_usage'];
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
