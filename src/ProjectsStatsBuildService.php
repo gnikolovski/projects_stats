@@ -146,7 +146,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
     $table_body = [];
     foreach ($machine_names as $machine_name) {
       $stats = $this->getStats(trim($machine_name));
-      if (empty($stats['project_type']) || empty($stats['name']) || $stats['download_count'] == NULL) {
+      if (empty($stats['project_type']) || empty($stats['name'])) {
         continue;
       }
 
@@ -209,7 +209,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
     $all_projects = [];
     foreach ($machine_names as $machine_name) {
       $stats = $this->getStats(trim($machine_name));
-      if (empty($stats['project_type']) || empty($stats['name']) || $stats['download_count'] == NULL) {
+      if (empty($stats['project_type']) || empty($stats['name'])) {
         continue;
       }
       $project_type = str_replace('project_', '', $stats['project_type']) . 's';
