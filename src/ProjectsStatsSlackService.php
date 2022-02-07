@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Class ProjectsStatsSlackService.
+ * Defines the Projects Stats Slack service class.
  *
  * @package Drupal\projects_stats
  */

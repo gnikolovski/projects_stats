@@ -3,7 +3,7 @@
 namespace Drupal\projects_stats;
 
 /**
- * Interface ProjectsStatsBuildServiceInterface.
+ * Defines an interface for Projects Stats build service.
  *
  * @package Drupal\projects_stats
  */

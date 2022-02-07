@@ -7,11 +7,10 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use SimpleXMLElement;
 use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
- * Class ProjectsStatsBuildService.
+ * Defines the Projects Stats build service class.
  *
  * @package Drupal\projects_stats
  */
@@ -303,7 +302,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
     try {
       $res = $client->get("https://updates.drupal.org/release-history/$machine_name/all", ['http_errors' => FALSE]);
       $xml = $res->getBody()->getContents();
-      $versions = new SimpleXMLElement($xml);
+      $versions = new \SimpleXMLElement($xml);
       $last_version = isset($versions->releases->release->version) ? $versions->releases->release->version->__toString() : 'n/a';
       $changed = isset($versions->releases->release->date) ? date('d-m-Y', $versions->releases->release->date->__toString()) : 'n/a';
       return [

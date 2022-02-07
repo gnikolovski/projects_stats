@@ -3,7 +3,7 @@
 namespace Drupal\projects_stats;
 
 /**
- * Interface ProjectsStatsSlackServiceInterface.
+ * Defines an interface for Projects Stats Slack service.
  *
  * @package Drupal\projects_stats
  */
