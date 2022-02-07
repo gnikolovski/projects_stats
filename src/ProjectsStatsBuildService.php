@@ -325,7 +325,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
   protected function sortModulesList($a, $b) {
     $sort_by = $this->configuration['sort_by'];
     if ($sort_by == 'count') {
-      return $a['total_usage_raw'] < $b['total_usage_raw'];
+      return $b['total_usage_raw'] <=> $a['total_usage_raw'];
     }
     else {
       return strcmp($a['title'][0], $b['title'][0]);

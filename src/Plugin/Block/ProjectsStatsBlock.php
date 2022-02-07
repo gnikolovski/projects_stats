@@ -166,7 +166,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'select',
       '#title' => $this->t('Sort by'),
       '#options' => [
-        'count' => $this->t('Download count'),
+        'count' => $this->t('Total usage count'),
         'name' => $this->t('Name'),
         'no' => $this->t('No sort'),
       ],
