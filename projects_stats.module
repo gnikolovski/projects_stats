@@ -25,7 +25,7 @@ function projects_stats_theme($existing, $type, $theme, $path) {
         'description' => '',
         'all_projects' => [],
         'target' => '_self',
-        'show_downloads' => TRUE,
+        'show_total_usage' => TRUE,
       ],
     ],
   ];

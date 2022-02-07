@@ -77,7 +77,7 @@ class ProjectsStatsSettingsForm extends ConfigFormBase {
 
     $form['slack_integration']['send_stats_to_slack'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Send downloads count to a Slack channel'),
+      '#title' => $this->t('Send total usage count to a Slack channel'),
       '#default_value' => $config->get('send_stats_to_slack'),
     ];
 

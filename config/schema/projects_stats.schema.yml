@@ -4,7 +4,7 @@ projects_stats.settings:
   mapping:
     send_stats_to_slack:
       type: boolean
-      label: 'Send downloads count to a Slack channel'
+      label: 'Send total usage count to a Slack channel'
     machine_names:
       type: text
       label: 'Project machine names'
@@ -36,9 +36,9 @@ block.settings.projects_stats:
       label: 'Additional columns'
       sequence:
         type: string
-    show_downloads:
+    show_total_usage:
       type: boolean
-      label: 'Show download count'
+      label: 'Show total usage count'
     collapsible_list:
       type: boolean
       label: 'Make list collapsible'

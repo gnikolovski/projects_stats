@@ -80,7 +80,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       'description' => '',
       'additional_columns' => [],
       'sort_by' => 'count',
-      'show_downloads' => TRUE,
+      'show_total_usage' => TRUE,
       'collapsible_list' => FALSE,
       'cache_age' => 86400,
       'classes' => '',
@@ -121,7 +121,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'checkboxes',
       '#title' => $this->t('Additional columns'),
       '#options' => [
-        'project_usage' => $this->t('Usage'),
+        'usage_per_version' => $this->t('Usage count per version'),
         'created' => $this->t('Created date'),
         'changed' => $this->t('Last modified date'),
         'last_version' => $this->t('Last released version'),
@@ -136,10 +136,10 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
       ],
     ];
 
-    $form['show_downloads'] = [
+    $form['show_total_usage'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Show download count'),
-      '#default_value' => $this->configuration['show_downloads'],
+      '#title' => $this->t('Show total usage count'),
+      '#default_value' => $this->configuration['show_total_usage'],
       '#states' => [
         'visible' => [
           [
@@ -222,7 +222,7 @@ class ProjectsStatsBlock extends BlockBase implements ContainerFactoryPluginInte
     $this->configuration['description'] = $form_state->getValue('description');
     $this->configuration['additional_columns'] = $form_state->getValue('additional_columns');
     $this->configuration['sort_by'] = $form_state->getValue('sort_by');
-    $this->configuration['show_downloads'] = $form_state->getValue('show_downloads');
+    $this->configuration['show_total_usage'] = $form_state->getValue('show_total_usage');
     $this->configuration['collapsible_list'] = $form_state->getValue('collapsible_list');
     $this->configuration['cache_age'] = $form_state->getValue('cache_age');
     $this->configuration['classes'] = $form_state->getValue('classes');

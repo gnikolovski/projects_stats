@@ -12,8 +12,8 @@
           {% for project in projects %}
             <li class="block-projects-stats__project">
               {{ link(project.name, project.url, {'target': target, 'class': ['block-projects-stats__project-name']}) }}
-              {% if show_downloads %}
-                <span class="block-projects-stats__download-count">{{ project.download_count }}</span>
+              {% if show_total_usage %}
+                <span class="block-projects-stats__total-usage">{{ project.total_usage }}</span>
               {% endif %}
             </li>
           {% endfor %}

@@ -73,13 +73,13 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
     }
     $machine_names = array_unique($machine_names);
 
-    $message = $this->t('Downloads:') . PHP_EOL;
+    $message = $this->t('Total usage count:') . PHP_EOL;
     foreach ($machine_names as $machine_name) {
-      $downloads_count = $this->getDownloadsCount($machine_name);
-      if ($downloads_count == 'n/a') {
+      $total_usage = $this->getTotalUsage($machine_name);
+      if ($total_usage == 'n/a') {
         continue;
       }
-      $message .= $downloads_count . PHP_EOL;
+      $message .= $total_usage . PHP_EOL;
     }
 
     return [
@@ -90,7 +90,7 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
   /**
    * Get data from drupal.org API endpoint.
    */
-  private function getDownloadsCount($machine_name) {
+  private function getTotalUsage($machine_name) {
     $base_url = 'https://www.drupal.org/api-d7/node.json?field_project_machine_name=';
     $client = new Client();
     try {
@@ -99,12 +99,17 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
       ]);
       $body = $res->getBody();
       $decoded_body = json_decode($body, TRUE);
-      if (!isset($decoded_body['list'][0]) || empty($decoded_body['list'][0]['field_download_count'])) {
+      if (!isset($decoded_body['list'][0]) || empty($decoded_body['list'][0]['project_usage'])) {
         return 'n/a';
       }
-      $downloads_count = '_' . $decoded_body['list'][0]['title'] . ': ' .
-        $decoded_body['list'][0]['field_download_count'] . '_';
-      return $downloads_count;
+
+      $total_usage = 0;
+      foreach ($decoded_body['list'][0]['project_usage'] as $usage_count) {
+        $total_usage += $usage_count;
+      }
+
+      $total_usage_count = '_' . $decoded_body['list'][0]['title'] . ': ' . $total_usage . '_';
+      return $total_usage_count;
     }
     catch (RequestException $e) {
       $this->messenger->addError($e->getMessage());

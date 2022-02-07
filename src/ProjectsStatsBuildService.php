@@ -122,7 +122,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
     $classes = $this->configuration['classes'];
     $target = $this->configuration['target'];
 
-    $table_head = [$this->t('Title'), $this->t('Downloads')];
+    $table_head = [$this->t('Title'), $this->t('Total usage count')];
     foreach ($additional_columns as $key => $value) {
       if ($value) {
         $key = str_replace('_', ' ', $key);
@@ -153,8 +153,8 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       $table_body_row = [
         'title' => $stats['name'],
         'url' => $stats['url'],
-        'downloads' => number_format($stats['download_count'], 0, '.', ','),
-        'downloads_raw' => $stats['download_count'],
+        'total_usage' => number_format($stats['total_usage'], 0, '.', ','),
+        'total_usage_raw' => $stats['total_usage'],
       ];
 
       foreach ($additional_columns as $key => $value) {
@@ -190,7 +190,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
    *   The list of projects.
    */
   protected function generateList(array $machine_names) {
-    $show_downloads = $this->configuration['show_downloads'];
+    $show_total_usage = $this->configuration['show_total_usage'];
     $description = $this->configuration['description'];
     $classes = $this->configuration['classes'];
     $target = $this->configuration['target'];
@@ -221,7 +221,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       '#classes' => ltrim($classes . ' block-projects-stats'),
       '#description' => $description,
       '#all_projects' => $all_projects,
-      '#show_downloads' => $show_downloads,
+      '#show_total_usage' => $show_total_usage,
       '#target' => $target == TRUE ? '_blank' : '_self',
       '#attached' => [
         'library' => [
@@ -249,8 +249,8 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
           'project_type' => '',
           'name' => '',
           'url' => '',
-          'download_count' => 'n/a',
-          'project_usage' => 'n/a',
+          'total_usage' => 'n/a',
+          'usage_per_version' => 'n/a',
           'created' => $this->t('n/a'),
           'changed' => $this->t('n/a'),
           'last_version' => $this->t('n/a'),
@@ -258,8 +258,11 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       }
       $project_type = $decoded_body['list'][0]['type'];
       $name = $decoded_body['list'][0]['title'];
-      $download_count = (int) $decoded_body['list'][0]['field_download_count'];
-      $project_usage = $decoded_body['list'][0]['project_usage'];
+      $total_usage = 0;
+      foreach ($decoded_body['list'][0]['project_usage'] as $count) {
+        $total_usage += $count;
+      }
+      $usage_per_version = $decoded_body['list'][0]['project_usage'];
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
       $changed = $version_data['changed'];
@@ -268,8 +271,8 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
         'project_type' => $project_type,
         'name' => $name,
         'url' => Url::fromUri('https://www.drupal.org/project/' . trim($machine_name)),
-        'download_count' => $download_count,
-        'project_usage' => $project_usage,
+        'total_usage' => $total_usage,
+        'usage_per_version' => $usage_per_version,
         'created' => date('d-m-Y', $created),
         'changed' => $changed,
         'last_version' => $last_version,
@@ -282,8 +285,8 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
         'project_type' => '',
         'name' => '',
         'url' => '',
-        'download_count' => 'n/a',
-        'project_usage' => 'n/a',
+        'total_usage' => 'n/a',
+        'usage_per_version' => 'n/a',
         'created' => $this->t('n/a'),
         'changed' => $this->t('n/a'),
         'last_version' => $this->t('n/a'),
@@ -323,7 +326,7 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
   protected function sortModulesList($a, $b) {
     $sort_by = $this->configuration['sort_by'];
     if ($sort_by == 'count') {
-      return $a['downloads_raw'] < $b['downloads_raw'];
+      return $a['total_usage_count_raw'] < $b['total_usage_count_raw'];
     }
     else {
       return strcmp($a['title'][0], $b['title'][0]);

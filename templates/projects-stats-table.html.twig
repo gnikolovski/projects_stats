@@ -13,8 +13,8 @@
     {% for cell in table_body %}
       <tr>
         <td>{{ link(cell.title, cell.url, {'target': target}) }}</td>
-        <td>{{ cell.downloads }}</td>
-        {% if cell.project_usage is defined %}<td>{{ cell.project_usage }}</td>{% endif %}
+        <td>{{ cell.total_usage }}</td>
+        {% if cell.usage_per_version is defined %}<td>{{ cell.usage_per_version }}</td>{% endif %}
         {% if cell.created is defined %}<td>{{ cell.created }}</td>{% endif %}
         {% if cell.changed is defined %}<td>{{ cell.changed }}</td>{% endif %}
         {% if cell.last_version is defined %}<td>{{ cell.last_version }}</td>{% endif %}
