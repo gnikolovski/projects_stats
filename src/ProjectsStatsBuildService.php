@@ -258,10 +258,15 @@ class ProjectsStatsBuildService implements ProjectsStatsBuildServiceInterface {
       $project_type = $decoded_body['list'][0]['type'];
       $name = $decoded_body['list'][0]['title'];
       $total_usage = 0;
-      foreach ($decoded_body['list'][0]['project_usage'] as $count) {
-        $total_usage += $count;
+      if (isset($decoded_body['list'][0]['project_usage'])) {
+        foreach ($decoded_body['list'][0]['project_usage'] as $count) {
+          $total_usage += $count;
+        }
       }
-      $usage_per_version = $decoded_body['list'][0]['project_usage'];
+      $usage_per_version = 'n/a';
+      if (isset($decoded_body['list'][0]['project_usage'])) {
+        $usage_per_version = $decoded_body['list'][0]['project_usage'];
+      }
       $created = $decoded_body['list'][0]['created'];
       $version_data = $this->getLastVersion($machine_name);
       $changed = $version_data['changed'];

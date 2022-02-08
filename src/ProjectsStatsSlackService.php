@@ -104,8 +104,10 @@ class ProjectsStatsSlackService implements ProjectsStatsSlackServiceInterface {
       }
 
       $total_usage = 0;
-      foreach ($decoded_body['list'][0]['project_usage'] as $usage_count) {
-        $total_usage += $usage_count;
+      if (isset($decoded_body['list'][0]['project_usage'])) {
+        foreach ($decoded_body['list'][0]['project_usage'] as $usage_count) {
+          $total_usage += $usage_count;
+        }
       }
 
       $total_usage_count = '_' . $decoded_body['list'][0]['title'] . ': ' . $total_usage . '_';
