@@ -31,7 +31,7 @@ class ProjectsStatsUITest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->drupalCreateUser(['administer projects stats']));
